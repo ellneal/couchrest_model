@@ -23,9 +23,10 @@ Gem::Specification.new do |s|
   s.require_paths = ["lib"]
 
   s.add_dependency("couchrest",   "2.0.0")
-  s.add_dependency("activemodel", "~> 4.0")
+  s.add_dependency("activemodel", ">= 4.0.2")
   s.add_dependency("tzinfo",      ">= 0.3.22")
-  s.add_development_dependency("rspec", "~> 2.14.1")
+  s.add_dependency("hashdiff",    "~> 0.3")
+  s.add_development_dependency("rspec", "~> 3.5.0")
   s.add_development_dependency("rack-test", ">= 0.5.7")
   s.add_development_dependency("rake", ">= 0.8.0")
   s.add_development_dependency("test-unit")
