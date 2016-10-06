@@ -57,20 +57,24 @@ module CouchRest
           elsif doc['couchrest-hash'] != checksum
             id += "_migration"
 
-            # Delete current migration if there is one
+            # if the old migration has the same checksum don't recreate it
             old_migration = load_from_database(db, id)
-            db.delete_doc(old_migration) if old_migration
-
-            # Save new design doc
-            new_doc = doc.merge(to_hash)
-            new_doc['_id'] = id
-            new_doc.delete('_rev')
-            db.save_doc(new_doc)
+            migration_doc = if old_migration && old_migration['couchrest-hash'] == checksum
+              old_migration
+            else
+              db.delete_doc(old_migration) if old_migration
+              # Save new design doc
+              new_doc = doc.merge(to_hash)
+              new_doc['_id'] = id
+              new_doc.delete('_rev')
+              db.save_doc(new_doc)
+              new_doc
+            end
 
             # Proc definition to copy the migration doc over the original
             cleanup = Proc.new do
-              db.copy_doc(new_doc, doc)
-              db.delete_doc(new_doc)
+              db.copy_doc(migration_doc, doc)
+              db.delete_doc(migration_doc)
               self
             end
 
