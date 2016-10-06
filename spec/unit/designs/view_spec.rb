@@ -158,6 +158,11 @@ describe "Design View" do
           expect(@design_doc['views']['by_title']['reduce']).to eql('_stats')
         end
 
+        it "should allow the reduce function to be omitted" do
+          @klass.define(@design_doc, 'by_title', :reduce => :none)
+          expect(@design_doc['views']['by_title']['reduce']).to be_nil
+        end
+
         it "should allow the emit value to be overridden" do
           @klass.define(@design_doc, 'by_title', :emit => :name)
           str = @design_doc['views']['by_title']['map']

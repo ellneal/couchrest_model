@@ -518,8 +518,12 @@ module CouchRest
             end
 
             if opts[:reduce].is_a?(Symbol)
-              # Assume calling a built in method, convert to a string
-              opts[:reduce] = "_#{opts[:reduce]}"
+              if opts[:reduce] == :none
+                opts[:reduce] = nil
+              else
+                # Assume calling a built in method, convert to a string
+                opts[:reduce] = "_#{opts[:reduce]}"
+              end
             end
 
             design_doc['views'] ||= {}
